@@ -8,6 +8,14 @@ const server=createServer(app);
 const io=new SocketIOServer(server);
 app.use(bodyParser.json());
 
+app.post("/api/send_notification",(req,res)=>{
+    const {title,description}=req.body;
+    io.emit("notification",{title,description});
+    res.status(200).json({
+        "message":"Notification broadcasted"
+    })
+})
+
 io.on("connection",(socket)=>{
     console.log("[+]New client connected");
     socket.on("disconnect",()=>{
@@ -15,6 +23,6 @@ io.on("connection",(socket)=>{
     })
 })
 
-server.listen("3000",()=>{
+server.listen("8000",()=>{
     console.log("[+]Server is running...");
 })
